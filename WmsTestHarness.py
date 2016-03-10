@@ -1,4 +1,4 @@
-# **********************************************************************************************************************
+# *********************************************************************************************************************
 # PURPOSE: Uses multiprocessing to make concurrent WMS requests in separate processes for load testing a WMS service.
 #          Supports the use of WMS as a tile map service (such as GeoWebCache services)
 #
@@ -15,12 +15,8 @@
 # NOTE: The log file will only be output after all test cases have been run, this is to avoid writing to a shared
 #       log file from multiple processes (possible in Python, but complicated...)
 #
-# AUTHOR: Hugh Saalmans
-#     Email: info@minus34.com
-#     Twitter: @minus34
-#
 # LICENSE: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
-#***********************************************************************************************************************
+# *********************************************************************************************************************
 
 import csv
 import math
@@ -32,10 +28,10 @@ import urllib2
 import traceback
 import multiprocessing
 
-##Set proxy for web requests (if required)
-#proxy = urllib2.ProxyHandler({'http': '123.45.678.90'})
-#opener = urllib2.build_opener(proxy)
-#urllib2.install_opener(opener)
+# # Set proxy for web requests (if required)
+# proxy = urllib2.ProxyHandler({'http': '123.45.678.90'})
+# opener = urllib2.build_opener(proxy)
+# urllib2.install_opener(opener)
 
 # Total number of WMS GetMap requests
 requests = 100
@@ -59,24 +55,24 @@ map_image_width = 1024
 map_image_height = 768
 
 # WMS GetMap Request parameters
-wms_server = "http://localhost:8080/geoserver/gwc/service/wms"  # Sample WMS tile map service
-#wms_server = "http://localhost:8080/geoserver/wms"  # Sample WMS service
-layers = "tiger-ny"
+wms_server = "http://localhost:8080/geoserver/cite/service/wms"  # Sample WMS tile map service
+# wms_server = "http://localhost:8080/geoserver/wms"  # Sample WMS service
+layers = "a_map_Layer"
 styles = ""
 image_format = "image/png"
 version = "1.3.0"  # Only v1.1.1 and v1.3.0 tested
-srs = "EPSG:900913"
+srs = "EPSG:900913"  # web mercator
 
 # Dictionary of max and min coordinates in SRS units. Used to randomly set map extents
-max_bounding_boxes = {1: [-8243538.0, 4964586.0, -8225729.0, 4995275.0]}  # Manhattan
+max_bounding_boxes = {1: [16796997.0, -4020748.0, 16835959.0, -3995282.0],  # Sydney
+                      2: [16124628.0, -4559667.0, 16163590.0, -4534318.0],  # Melbourne
+                      3: [17021863.0, -3192356.0, 17048580.0, -3174789.0],  # Brisbane
+                      4: [15417749.0, -4162522.0, 15447805.0, -4143515.0],  # Adelaide
+                      5: [12884117.0, -3773816.0, 12921966.0, -3748880.0],  # Perth
+                      6: [16391795.0, -5296763.0, 16410719.0, -5284614.0],  # Hobart
+                      7: [16587717.0, -4225203.0, 16609981.0, -4187007.0]}  # Canberra
 
-#max_bounding_boxes = {1: [16796997.0, -4020748.0, 16835959.0, -3995282.0],  # Sydney
-#                      2: [16124628.0, -4559667.0, 16163590.0, -4534318.0],  # Melbourne
-#                      3: [17021863.0, -3192356.0, 17048580.0, -3174789.0],  # Brisbane
-#                      4: [15417749.0, -4162522.0, 15447805.0, -4143515.0],  # Adelaide
-#                      5: [12884117.0, -3773816.0, 12921966.0, -3748880.0],  # Perth
-#                      6: [16391795.0, -5296763.0, 16410719.0, -5284614.0],  # Hobart
-#                      7: [16587717.0, -4225203.0, 16609981.0, -4187007.0]}  # Canberra
+# max_bounding_boxes = {1: [-8243538.0, 4964586.0, -8225729.0, 4995275.0]}  # Manhattan
 
 
 def main():
